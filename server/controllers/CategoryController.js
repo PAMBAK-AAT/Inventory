@@ -19,4 +19,64 @@ const addCategory = async (req, res) => {
     }
 }
 
-export { addCategory };
+const getCategories = async (req, res) => {
+    try {
+        const categories = await CategoryModel.find({});
+        return res.status(200).json({ success: true, categories });
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
+    }
+}
+
+
+
+const updateCategory = async (req, res) => {
+  try {
+    const { categoryName, categoryDescription } = req.body;
+    const categoryId = req.params.id; // Get the ID from the URL
+
+    if (!categoryName) {
+      return res.status(400).json({ success: false, message: "Category name is required" });
+    }
+
+    const updatedCategory = await CategoryModel.findByIdAndUpdate(
+      categoryId,
+      { categoryName, categoryDescription },
+      { new: true } // This option returns the updated document
+    );
+
+    if (!updatedCategory) {
+      return res.status(404).json({ success: false, message: "Category not found" });
+    }
+
+    res.json({ success: true, message: "Category updated successfully!", category: updatedCategory });
+
+  } catch (error) {
+    console.error("Error updating category:", error);
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
+  }
+};
+
+
+// Controller for: DELETE /api/category/delete/:id
+const deleteCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id; // Get the ID from the URL
+
+    const deletedCategory = await CategoryModel.findByIdAndDelete(categoryId);
+
+    if (!deletedCategory) {
+      return res.status(404).json({ success: false, message: "Category not found" });
+    }
+
+    res.json({ success: true, message: "Category deleted successfully!" });
+
+  } catch (error) {
+    console.error("Error deleting category:", error);
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
+  }
+};
+
+
+export { addCategory, getCategories, updateCategory, deleteCategory };

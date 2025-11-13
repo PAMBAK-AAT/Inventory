@@ -25,7 +25,7 @@ function App() {
           >
             <Route
               index
-              element={<h1>Summary of dashboard</h1>}
+              element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Summary of dashboard</h1>}
             />
             <Route
               path="categories"
@@ -33,24 +33,24 @@ function App() {
             />
             <Route
               path="products"
-              element={<h1>Products Page</h1>}
+              element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Products Page</h1>}
             />
             <Route
               path="suppliers"
-              element={<h1>Suppliers Page</h1>}
+              element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Suppliers Page</h1>}
             />
             <Route
               path="users"
-              element={<h1>Users Page</h1>}
+              element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Users Page</h1>}
             />
             <Route
               path="orders"
-              element={<h1>Orders Page</h1>}
+              element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Orders Page</h1>}
             />
 
           </Route>
 
-          <Route path="/customer/dashboard" element={<h1>Customer Dashboard</h1>} />
+          <Route path="/customer/dashboard" element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Customer Dashboard</h1>} />
           <Route path="/login" element={<Login />} />
           <Route path="/unauthorized" element={<p className='font-bold text-3xl mt-20 ml-20'>Unauthorized Access</p>} />
         </Routes>

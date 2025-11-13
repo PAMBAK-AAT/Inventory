@@ -1,0 +1,16 @@
+
+
+/* Add this to your ./src/index.css file */
+
+@keyframes gradient-animation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-gradient {
+  /* New Color Palette: Purples, Pinks, Blues */
+  background: linear-gradient(-45deg, #4f46e5, #7c3aed, #db2777, #60a5fa);
+  background-size: 400% 400%;
+  animation: gradient-animation 15s ease infinite;
+}
