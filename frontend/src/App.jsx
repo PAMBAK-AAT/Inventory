@@ -6,6 +6,7 @@ import Login from './pages/login.jsx';
 import ProtectedRoute from './utils/ProtectedRoute.jsx';
 import Dashboard from './pages/dashboard.jsx';
 import Categories from './components/Categories.jsx';
+import SignUp from './pages/signup.jsx';
 
 function App() {
 
@@ -52,6 +53,7 @@ function App() {
 
           <Route path="/customer/dashboard" element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Customer Dashboard</h1>} />
           <Route path="/login" element={<Login />} />
+          <Route  path="/register" element={<SignUp />}/>
           <Route path="/unauthorized" element={<p className='font-bold text-3xl mt-20 ml-20'>Unauthorized Access</p>} />
         </Routes>
       </Router>

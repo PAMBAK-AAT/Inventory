@@ -188,7 +188,7 @@ const Categories = () => {
                                     placeholder="e.g. Engine Oil"
                                     value={categoryName}
                                     onChange={(e) => setCategoryName(e.target.value)}
-                                    className="w-full px-4 py-3 bg-white/80 border border-slate-300 rounded-lg focus:outline-none focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all duration-200"
+                                    className="w-full px-4 py-3 text-gray-500 bg-white/80 border border-slate-300 rounded-lg focus:outline-none focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all duration-200"
                                     required
                                 />
                             </div>
@@ -202,7 +202,7 @@ const Categories = () => {
                                     placeholder="e.g. All types of oil used in Trucks"
                                     value={categoryDescription}
                                     onChange={(e) => setCategoryDescription(e.target.value)}
-                                    className="w-full px-4 py-3 bg-white/80 border border-slate-300 rounded-lg focus:outline-none focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all duration-200"
+                                    className="w-full text-gray-500 px-4 py-3 bg-white/80 border border-slate-300 rounded-lg focus:outline-none focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all duration-200"
                                 />
                             </div>
                             
