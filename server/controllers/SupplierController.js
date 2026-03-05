@@ -32,6 +32,28 @@ const getSuppliers = async (req, res) => {
     }
 }
 
+const updateSupplier = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, email, number, address } = req.body;
+
+        const updatedSupplier = await SupplierModel.findByIdAndUpdate(
+            id,
+            { name, email, number, address },
+            { new: true } // Returns the modified document rather than the original
+        );
+
+        if (!updatedSupplier) {
+            return res.status(404).json({ success: false, message: "Supplier not found" });
+        }
+
+        return res.status(200).json({ success: true, message: "Supplier updated successfully", updatedSupplier });
+    } catch (error) {
+        console.error("Error updating supplier:", error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
+    }
+}
+
 // Add this function to your existing controller
 const deleteSupplier = async (req, res) => {
     try {
@@ -49,4 +71,4 @@ const deleteSupplier = async (req, res) => {
     }
 }
 
-export {addSupplier, getSuppliers, deleteSupplier};
+export {addSupplier, getSuppliers, deleteSupplier, updateSupplier};

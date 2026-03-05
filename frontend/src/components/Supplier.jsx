@@ -7,7 +7,10 @@ import React, { useState, useEffect } from "react";
 import { User, Mail, Phone, MapPin, Plus, Loader2 } from "lucide-react"; // Optional: lucide-react for icons
 
 const Supplier = () => {
+
   const [addEditModal, setEditModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
   const [supplierData, setSupplierData] = useState({
@@ -22,6 +25,18 @@ const Supplier = () => {
       ...supplierData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleEdit = (supplier) => {
+    setSupplierData({
+        name: supplier.name,
+        email: supplier.email,
+        number: supplier.number,
+        address: supplier.address,
+    });
+    setSelectedId(supplier._id);
+    setIsEdit(true);
+    setEditModal(true);
   };
 
     const handleDelete = async (id) => {
@@ -69,25 +84,52 @@ const Supplier = () => {
     fetchSuppliers();
   }, []);
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await axios.post(
+  //       "http://localhost:3000/api/supplier/add",
+  //       supplierData,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
+  //         },
+  //       }
+  //     );
+  //     setSupplierData({ name: "", email: "", number: "", address: "" });
+  //     setEditModal(false);
+  //     fetchSuppliers();
+  //   } catch (error) {
+  //     console.error("Error adding supplier", error);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "http://localhost:3000/api/supplier/add",
-        supplierData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
-          },
-        }
-      );
-      setSupplierData({ name: "", email: "", number: "", address: "" });
-      setEditModal(false);
-      fetchSuppliers();
+        const url = isEdit 
+            ? `http://localhost:3000/api/supplier/update/${selectedId}` 
+            : "http://localhost:3000/api/supplier/add";
+        
+        const method = isEdit ? 'put' : 'post';
+
+        await axios[method](url, supplierData, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
+            },
+        });
+
+        // Reset everything
+        setEditModal(false);
+        setIsEdit(false);
+        setSelectedId(null);
+        setSupplierData({ name: "", email: "", number: "", address: "" });
+        fetchSuppliers();
     } catch (error) {
-      console.error("Error adding supplier", error);
+        console.error("Error saving supplier", error);
     }
   };
+
 
   return (
     <div className="w-full min-h-screen p-4 md:p-8 bg-gray-50/50">
@@ -101,7 +143,11 @@ const Supplier = () => {
         </div>
 
         <button
-          onClick={() => setEditModal(true)}
+          onClick={() => {
+            setIsEdit(false);
+            setSupplierData({ name: "", email: "", number: "", address: "" });
+            setEditModal(true);
+          }}
           className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95"
         >
           <Plus size={20} />
@@ -166,7 +212,10 @@ const Supplier = () => {
                     </td>
                     <td className="px-6 py-5 text-right">
                       <div className="flex justify-end gap-2">
-                        <button className="text-blue-600 hover:text-blue-800 text-sm font-semibold p-2 rounded-lg hover:bg-blue-100 transition-colors">
+                        <button 
+                          onClick={() => handleEdit(supplier)}
+                          className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+                        >
                           Edit
                         </button>
                         <button 

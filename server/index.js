@@ -14,6 +14,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/supplier', supplierRoutes);
 
+
 app.listen(process.env.PORT, () => {
     connectDB();
     console.log("Server is running on 3000 port.");
