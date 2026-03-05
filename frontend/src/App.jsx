@@ -8,6 +8,7 @@ import Dashboard from './pages/dashboard.jsx';
 import Categories from './components/Categories.jsx';
 import Supplier from './components/Supplier.jsx';
 import SignUp from './pages/signup.jsx';
+import Product from './components/Products.jsx'
 
 function App() {
 
@@ -35,7 +36,7 @@ function App() {
             />
             <Route
               path="products"
-              element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Products Page</h1>}
+              element={<Product />}
             />
             <Route
               path="suppliers"

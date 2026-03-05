@@ -1,8 +1,6 @@
 
 
 
-
-
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { User, Mail, Phone, MapPin, Plus, Loader2, Trash2, Edit, Search } from "lucide-react";
@@ -138,7 +136,7 @@ const Supplier = () => {
             setSupplierData({ name: "", email: "", number: "", address: "" });
             setEditModal(true);
           }}
-          className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-all shadow-lg active:scale-95"
+          className="cursor-pointer flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-all shadow-lg active:scale-95"
         >
           <Plus size={20} />
           Add New Supplier
@@ -211,13 +209,13 @@ const Supplier = () => {
                       <div className="flex justify-end gap-2">
                         <button 
                           onClick={() => handleEdit(supplier)}
-                          className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                          className="cursor-pointer p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
                         >
                           <Edit size={18} />
                         </button>
                         <button 
                           onClick={() => handleDelete(supplier._id)}
-                          className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                          className="cursor-pointer p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -238,7 +236,7 @@ const Supplier = () => {
               <h2 className="text-2xl font-bold text-gray-900">
                 {isEdit ? "Edit Supplier" : "Add Supplier"}
               </h2>
-              <button onClick={() => setEditModal(false)} className="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+              <button onClick={() => setEditModal(false)} className="cursor-pointer text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
@@ -291,13 +289,13 @@ const Supplier = () => {
                 <button
                   type="button"
                   onClick={() => setEditModal(false)}
-                  className="flex-1 px-4 py-3 border border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition-colors"
+                  className="cursor-pointer flex-1 px-4 py-3 border border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-shadow shadow-lg"
+                  className="cursor-pointer flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-shadow shadow-lg"
                 >
                   {isEdit ? "Update Details" : "Save Partner"}
                 </button>
