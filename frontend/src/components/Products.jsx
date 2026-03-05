@@ -22,23 +22,32 @@ const Product = () => {
   });
 
   const fetchInitialData = async () => {
-    setLoading(true);
-    try {
-      const config = { headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` } };
-      const [prodRes, catRes, suppRes] = await Promise.all([
-        axios.get("http://localhost:3000/api/product", config),
-        axios.get("http://localhost:3000/api/category", config),
-        axios.get("http://localhost:3000/api/supplier", config)
-      ]);
-      setProducts(prodRes.data.products);
-      setCategories(catRes.data.categories);
-      setSuppliers(suppRes.data.suppliers);
-    } catch (error) {
-      console.error("Fetch error", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    const config = { headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` } };
+    
+    // Fetching all data
+    const [prodRes, catRes, suppRes] = await Promise.all([
+      axios.get("http://localhost:3000/api/product", config),
+      axios.get("http://localhost:3000/api/category", config),
+      axios.get("http://localhost:3000/api/supplier", config)
+    ]);
+
+    // Added console logs to help you debug what the server is actually sending
+    console.log("Categories from server:", catRes.data);
+    console.log("Suppliers from server:", suppRes.data);
+
+    // Ensure we are setting arrays even if the data is missing
+    setProducts(prodRes.data.products || []);
+    setCategories(catRes.data.categories || []);
+    setSuppliers(suppRes.data.suppliers || []);
+
+  } catch (error) {
+    console.error("Fetch error", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => { fetchInitialData(); }, []);
 
@@ -89,8 +98,11 @@ const Product = () => {
         />
       </div>
 
+      {/* Product Table Section */}
       <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
-        {loading ? <div className="p-10 text-center"><Loader2 className="animate-spin mx-auto" /></div> : (
+        {loading ? (
+          <div className="p-10 text-center"><Loader2 className="animate-spin mx-auto" /></div>
+        ) : (
           <table className="w-full text-left">
             <thead className="bg-gray-50 border-b">
               <tr>
@@ -98,25 +110,30 @@ const Product = () => {
                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Category</th>
                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Supplier</th>
                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Price</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Description</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Stock</th> {/* Changed from Description to Stock */}
                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y">
-              {filteredProducts.map(p => (
+              {filteredProducts.map((p) => (
                 <tr key={p._id} className="hover:bg-gray-50 transition">
                   <td className="px-6 py-4 font-bold text-gray-800">{p.name}</td>
                   <td className="px-6 py-4 text-gray-600">
-                    {/* Fixed N/A issue by using categoryName */}
                     {p.category?.categoryName || "Uncategorized"}
                   </td>
                   <td className="px-6 py-4 text-gray-600">{p.supplier?.name || "No Supplier"}</td>
                   <td className="px-6 py-4 text-blue-600 font-semibold">Rs. {p.price}</td>
-                  <td className="px-6 py-4 text-gray-500 text-sm italic truncate max-w-[150px]">
-                    {p.description || "---"}
+                  <td className="px-6 py-4">
+                    {/* Stock display with conditional coloring */}
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      p.stock <= 5 ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
+                    }`}>
+                      {p.stock} units
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-right flex justify-end gap-2">
-                    <button onClick={() => {
+                    <button 
+                      onClick={() => {
                         setFormData({ 
                             name: p.name, 
                             category: p.category?._id, 
@@ -128,15 +145,24 @@ const Product = () => {
                         setSelectedId(p._id);
                         setIsEdit(true);
                         setModalOpen(true);
-                    }} className="p-2 text-blue-600 cursor-pointer hover:bg-blue-50 rounded-lg"><Edit size={18} /></button>
-                    <button onClick={async () => {
+                      }} 
+                      className="p-2 text-blue-600 cursor-pointer hover:bg-blue-50 rounded-lg"
+                    >
+                      <Edit size={18} />
+                    </button>
+                    <button 
+                      onClick={async () => {
                         if (window.confirm("Delete product?")) {
                             await axios.delete(`http://localhost:3000/api/product/delete/${p._id}`, {
                                 headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` }
                             });
                             fetchInitialData();
                         }
-                    }} className="p-2 text-red-600 cursor-pointer hover:bg-red-50 rounded-lg"><Trash2 size={18} /></button>
+                      }} 
+                      className="p-2 text-red-600 cursor-pointer hover:bg-red-50 rounded-lg"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -153,14 +179,31 @@ const Product = () => {
               <input type="text" placeholder="Product Name" className="w-full p-3 border rounded-xl outline-none focus:border-blue-500" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
               
               <div className="grid grid-cols-2 gap-4">
-                <select className="w-full p-3 border rounded-xl outline-none focus:border-blue-500" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} required>
-                  <option value="">Category</option>
-                  {categories.map(c => <option key={c._id} value={c._id}>{c.categoryName}</option>)}
+                <select 
+                    className="w-full p-3 border rounded-xl" 
+                    value={formData.category} 
+                    onChange={e => setFormData({...formData, category: e.target.value})} 
+                    required
+                >
+                    <option value="">Select Category</option>
+                    {categories.map(c => (
+                        <option key={c._id} value={c._id}>
+                        {c.categoryName} {/* Matches CategoryModel field 'categoryName' */}
+                        </option>
+                    ))}
                 </select>
 
-                <select className="w-full p-3 border rounded-xl outline-none focus:border-blue-500" value={formData.supplier} onChange={e => setFormData({...formData, supplier: e.target.value})}>
-                  <option value="">Supplier (Opt)</option>
-                  {suppliers.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
+                <select 
+                    className="w-full p-3 border rounded-xl" 
+                    value={formData.supplier} 
+                    onChange={e => setFormData({...formData, supplier: e.target.value})}
+                >
+                    <option value="">Select Supplier (Optional)</option>
+                    {suppliers.map(s => (
+                        <option key={s._id} value={s._id}>
+                        {s.name} {/* Matches SupplierModel field 'name' */}
+                        </option>
+                    ))}
                 </select>
               </div>
 

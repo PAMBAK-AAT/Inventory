@@ -16,8 +16,8 @@ export const addProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
     try {
         // .populate helps get the name of category instead of just the ID
-        const products = await ProductModel.find().populate('categoryName', 'name')
-        .populate('name', 'name');
+        const products = await ProductModel.find().populate('category', 'categoryName')
+        .populate('supplier', 'name');
         res.status(200).json({ success: true, products });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
@@ -27,7 +27,7 @@ export const getProducts = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     try {
-        await Product.findByIdAndUpdate(req.params.id, req.body);
+        await ProductModel.findByIdAndUpdate(req.params.id, req.body);
         res.status(200).json({ success: true, message: "Product updated" });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
@@ -36,7 +36,7 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     try {
-        await Product.findByIdAndDelete(req.params.id);
+        await ProductModel.findByIdAndDelete(req.params.id);
         res.status(200).json({ success: true, message: "Product deleted" });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
