@@ -1,12 +1,15 @@
+
+
+
+
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { User, Mail, Phone, MapPin, Plus, Loader2 } from "lucide-react"; // Optional: lucide-react for icons
 
 const Supplier = () => {
   const [addEditModal, setEditModal] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [suppliers, setSuppliers] = useState([]);
-
   const [supplierData, setSupplierData] = useState({
     name: "",
     email: "",
@@ -21,23 +24,38 @@ const Supplier = () => {
     });
   };
 
-  // 🔥 Fetch Suppliers
+    const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this supplier?")) {
+      try {
+        await axios.delete(`http://localhost:3000/api/supplier/delete/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
+          },
+        });
+        // Refresh the list after deletion
+        fetchSuppliers(); 
+      } catch (error) {
+        console.error("Error deleting supplier", error);
+        alert("Failed to delete supplier");
+      }
+    }
+  };
+
   const fetchSuppliers = async () => {
     setLoading(true);
     try {
+      // FIXED: URL changed from /api/suppliers to /api/supplier to match index.js
       const response = await axios.get(
-        "http://localhost:3000/api/suppliers",
+        "http://localhost:3000/api/supplier",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
           },
         }
       );
-
       setSuppliers(response.data.suppliers);
     } catch (error) {
       console.error("Error in fetching Supplier", error);
-
       if (error.response?.status === 401) {
         localStorage.removeItem("pos-token");
         window.location.href = "/login";
@@ -51,10 +69,8 @@ const Supplier = () => {
     fetchSuppliers();
   }, []);
 
-  // 🔥 Submit Supplier
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       await axios.post(
         "http://localhost:3000/api/supplier/add",
@@ -65,183 +81,186 @@ const Supplier = () => {
           },
         }
       );
-
-      // Reset form
-      setSupplierData({
-        name: "",
-        email: "",
-        number: "",
-        address: "",
-      });
-
+      setSupplierData({ name: "", email: "", number: "", address: "" });
       setEditModal(false);
       fetchSuppliers();
     } catch (error) {
       console.error("Error adding supplier", error);
-
-      if (error.response?.status === 401) {
-        localStorage.removeItem("pos-token");
-        window.location.href = "/login";
-      }
     }
   };
 
   return (
-    <div className="w-full h-full p-6 flex flex-col gap-6 bg-gray-100">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-800">
-          Supplier Management
-        </h1>
+    <div className="w-full min-h-screen p-4 md:p-8 bg-gray-50/50">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+            Suppliers
+          </h1>
+          <p className="text-gray-500 mt-1">Manage your supply chain partners and contact info.</p>
+        </div>
 
         <button
           onClick={() => setEditModal(true)}
-          className="px-5 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition shadow"
+          className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95"
         >
-          + Add Supplier
+          <Plus size={20} />
+          Add New Supplier
         </button>
       </div>
 
-      {/* Supplier List */}
-      <div className="bg-white p-4 rounded-xl shadow-md">
+      {/* Main Content Area */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         {loading ? (
-          <p className="text-gray-400">Loading...</p>
+          <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+            <Loader2 className="animate-spin mb-2" size={32} />
+            <p className="font-medium">Loading database...</p>
+          </div>
         ) : suppliers.length === 0 ? (
-          <p className="text-gray-400">No suppliers added yet</p>
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="bg-gray-100 p-4 rounded-full mb-4">
+              <User size={40} className="text-gray-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-800">No Suppliers Found</h3>
+            <p className="text-gray-500 max-w-xs">You haven't added any suppliers yet. Click the button above to get started.</p>
+          </div>
         ) : (
-          <div className="grid gap-4">
-            {suppliers.map((supplier) => (
-              <div
-                key={supplier._id}
-                className="p-4 border rounded-lg flex justify-between items-center"
-              >
-                <div>
-                  <h3 className="font-semibold text-lg">
-                    {supplier.name}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    {supplier.email}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {supplier.number}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {supplier.address}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-100">
+                  <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Supplier Name</th>
+                  <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Contact Info</th>
+                  <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Address</th>
+                  <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {suppliers.map((supplier) => (
+                  <tr key={supplier._id} className="hover:bg-blue-50/30 transition-colors group">
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+                          {supplier.name.charAt(0)}
+                        </div>
+                        <span className="font-bold text-gray-800">{supplier.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Mail size={14} className="text-gray-400" />
+                          {supplier.email}
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Phone size={14} className="text-gray-400" />
+                          {supplier.number}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="flex items-start gap-2 text-sm text-gray-600 max-w-xs">
+                        <MapPin size={14} className="text-gray-400 mt-1 shrink-0" />
+                        <span className="line-clamp-2">{supplier.address}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5 text-right">
+                      <div className="flex justify-end gap-2">
+                        <button className="text-blue-600 hover:text-blue-800 text-sm font-semibold p-2 rounded-lg hover:bg-blue-100 transition-colors">
+                          Edit
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(supplier._id)}
+                          className="text-red-600 hover:text-red-800 text-sm font-semibold p-2 rounded-lg hover:bg-red-50 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
 
-      {/* Now here show the suppliers */}
-      {/* Supplier List */}
-      <div className="bg-white p-6 rounded-xl shadow-md">
-        {loading ? (
-          <div className="flex justify-center items-center py-10">
-            <p className="text-gray-500 text-lg">Loading suppliers...</p>
-          </div>
-        ) : suppliers.length === 0 ? (
-          <div className="flex justify-center items-center py-10">
-            <p className="text-gray-400 text-lg">
-              No suppliers added yet
-            </p>
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {suppliers.map((supplier) => (
-              <div
-                key={supplier._id}
-                className="bg-gray-50 border rounded-xl p-5 shadow-sm hover:shadow-lg transition"
-              >
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  {supplier.name}
-                </h3>
-
-                <div className="space-y-1 text-sm text-gray-600">
-                  <p>
-                    <span className="font-medium">Email:</span>{" "}
-                    {supplier.email}
-                  </p>
-                  <p>
-                    <span className="font-medium">Phone:</span>{" "}
-                    {supplier.number}
-                  </p>
-                  <p>
-                    <span className="font-medium">Address:</span>{" "}
-                    {supplier.address}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Modal */}
+      {/* Modern Modal Overlay */}
       {addEditModal && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white w-full max-w-lg rounded-2xl p-6 shadow-xl">
-            <h2 className="text-2xl font-bold mb-5 text-gray-800">
-              Add Supplier
-            </h2>
+        <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl scale-up-animation">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Add Supplier</h2>
+              <button onClick={() => setEditModal(false)} className="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
 
-            <form className="grid gap-4" onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="name"
-                placeholder="Supplier Name"
-                value={supplierData.name}
-                onChange={handleChange}
-                required
-                className="px-4 py-2 border rounded-lg"
-              />
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div className="space-y-1">
+                <label className="text-sm font-semibold text-gray-700 ml-1">Company Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="e.g. Acme Supplies Ltd"
+                  value={supplierData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none"
+                />
+              </div>
 
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={supplierData.email}
-                onChange={handleChange}
-                required
-                className="px-4 py-2 border rounded-lg"
-              />
+              <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700 ml-1">Email Address</label>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="contact@supplier.com"
+                    value={supplierData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700 ml-1">Phone Number</label>
+                  <input
+                    type="tel"
+                    name="number"
+                    placeholder="+1 (555) 000-0000"
+                    value={supplierData.number}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none"
+                  />
+                </div>
+              </div>
 
-              <input
-                type="tel"
-                name="number"
-                placeholder="Phone Number"
-                value={supplierData.number}
-                onChange={handleChange}
-                required
-                className="px-4 py-2 border rounded-lg"
-              />
+              <div className="space-y-1">
+                <label className="text-sm font-semibold text-gray-700 ml-1">Office Address</label>
+                <textarea
+                  name="address"
+                  placeholder="Full street address..."
+                  rows="3"
+                  value={supplierData.address}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none resize-none"
+                />
+              </div>
 
-              <textarea
-                name="address"
-                placeholder="Address"
-                rows="3"
-                value={supplierData.address}
-                onChange={handleChange}
-                required
-                className="px-4 py-2 border rounded-lg resize-none"
-              />
-
-              <div className="flex justify-end gap-3 mt-4">
+              <div className="flex gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setEditModal(false)}
-                  className="px-4 py-2 border rounded-lg"
+                  className="flex-1 px-4 py-3 border border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
-
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-blue-600 text-white rounded-lg"
+                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-shadow shadow-lg shadow-blue-200"
                 >
-                  Save Supplier
+                  Save Partner
                 </button>
               </div>
             </form>
