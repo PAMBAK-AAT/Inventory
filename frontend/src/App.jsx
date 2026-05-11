@@ -9,6 +9,7 @@ import Categories from './components/Categories.jsx';
 import Supplier from './components/Supplier.jsx';
 import SignUp from './pages/signup.jsx';
 import Product from './components/Products.jsx'
+import Users from './components/Users.jsx';
 
 function App() {
 
@@ -44,7 +45,7 @@ function App() {
             />
             <Route
               path="users"
-              element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Users Page</h1>}
+              element={<Users />}
             />
             <Route
               path="orders"
