@@ -10,6 +10,7 @@ import Supplier from './components/Supplier.jsx';
 import SignUp from './pages/signup.jsx';
 import Product from './components/Products.jsx'
 import Users from './components/Users.jsx';
+import CustomerProducts from './components/CustomerProducts.jsx';
 
 function App() {
 
@@ -54,7 +55,12 @@ function App() {
 
           </Route>
 
-          <Route path="/customer/dashboard" element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Customer Dashboard</h1>} />
+          <Route 
+            path="/customer-dashboard" 
+            element={<Dashboard />} 
+          >
+            <Route index element={<CustomerProducts />}></Route>
+          </Route>
           <Route path="/login" element={<Login />} />
           <Route  path="/register" element={<SignUp />}/>
           <Route path="/unauthorized" element={<p className='font-bold text-3xl mt-20 ml-20'>Unauthorized Access</p>} />
