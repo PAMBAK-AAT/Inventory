@@ -21,7 +21,7 @@ const Sidebar = () => {
     // Customer/Staff menu items
     const customerItems = [
         
-        { name: "Products", path: "/customer-dashboard/products", icon: <FaBox />, isParent: false },
+        { name: "Products", path: "/customer-dashboard", icon: <FaBox />, isParent: false },
         { name: "Orders", path: "/customer-dashboard/orders", icon: <FaShoppingCart />, isParent: false },
         { name: "Profile", path: "/customer-dashboard/profile", icon: <FaCog />, isParent: false },
     ];

@@ -11,6 +11,8 @@ import SignUp from './pages/signup.jsx';
 import Product from './components/Products.jsx'
 import Users from './components/Users.jsx';
 import CustomerProducts from './components/CustomerProducts.jsx';
+import Orders from './components/Orders.jsx';
+
 
 function App() {
 
@@ -60,6 +62,8 @@ function App() {
             element={<Dashboard />} 
           >
             <Route index element={<CustomerProducts />}></Route>
+            <Route path="orders" element={<Orders />}></Route>
+
           </Route>
           <Route path="/login" element={<Login />} />
           <Route  path="/register" element={<SignUp />}/>

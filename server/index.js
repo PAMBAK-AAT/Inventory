@@ -19,7 +19,7 @@ app.use('/api/category', categoryRoutes);
 app.use('/api/supplier', supplierRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/orders', orderRouter);
+app.use('/api/order', orderRouter);
 
 
 app.listen(process.env.PORT, () => {
