@@ -7,7 +7,7 @@ const authMiddleware = async (req, res, next) => {
         // Use optional chaining '?' for a safer check
         const token = req.headers.authorization?.split(" ")[1];
         
-        if (!token) {
+        if (!token || token === "null" || token === "undefined") {
             return res.status(401).json({ success: false, message: "No token provided, authorization denied." });
         }
 

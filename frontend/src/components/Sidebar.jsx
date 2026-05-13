@@ -18,7 +18,7 @@ const Sidebar = () => {
         { name: "Profile", path: "/admin-dashboard/profile", icon: <FaCog />, isParent: false },
     ];
 
-    // Customer/Staff menu items
+    // Customer menu items
     const customerItems = [
         
         { name: "Products", path: "/customer-dashboard", icon: <FaBox />, isParent: false },

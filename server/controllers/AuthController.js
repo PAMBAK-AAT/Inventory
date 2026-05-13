@@ -20,7 +20,7 @@ const login = async (req, res) => {
         }
         const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '50000h'});
 
-        return res.status(200).json({success: true, message: "login successfully", token, user: {id: user._id, name: user.username, email: user.email, role: user.role}});
+        return res.status(200).json({success: true, message: "login successfully", token, user: {id: user._id, name: user.name, email: user.email, role: user.role}});
     }catch(error){
         return res.status(500).json({success: false, message: "Internal server error"});
     }
@@ -56,14 +56,15 @@ const register = async (req, res) => {
             // 'role' will default to 'customer' if you set it in your User model schema
         });
 
-        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '50000h' });
+        await newUser.save();
+        const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET, {expiresIn: '50000h'});
 
         // 6. Send success response
         return res.status(201).json({ 
             success: true, 
             message: "User registered successfully.",
-            token,
-            user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role } 
+            token, 
+            user: {id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role}
         });
 
     } catch (error) {

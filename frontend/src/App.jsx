@@ -60,7 +60,12 @@ function App() {
 
           <Route 
             path="/customer-dashboard" 
-            element={<Dashboard />} 
+            element={
+              // ADD THIS PROTECTED ROUTE WRAPPER
+              <ProtectedRoute requireRole={['customer', 'admin']}>
+                <Dashboard />
+              </ProtectedRoute>
+            }
           >
             <Route index element={<CustomerProducts />}></Route>
             <Route path="orders" element={<Orders />}></Route>
