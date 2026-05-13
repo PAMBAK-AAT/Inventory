@@ -24,7 +24,7 @@ const Profile = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` } };
       // Note: Make sure you have this route in your backend!
-      const res = await axios.get("http://localhost:3000/api/user/profile", config);
+      const res = await axios.get("http://localhost:3000/api/users/profile", config);
       
       if (res.data.success) {
         const { name, email, address } = res.data.user;
@@ -55,7 +55,7 @@ const Profile = () => {
         ...(formData.password && { password: formData.password }) 
       };
 
-      const res = await axios.put("http://localhost:3000/api/user/update", payload, config);
+      const res = await axios.put("http://localhost:3000/api/users/update", payload, config);
       
       if (res.data.success) {
         alert("Profile updated successfully!");
@@ -93,7 +93,7 @@ const Profile = () => {
             {!isEditing ? (
               <button 
                 onClick={() => setIsEditing(true)}
-                className="flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition shadow-md font-semibold"
+                className="cursor-pointer flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition shadow-md font-semibold"
               >
                 <Edit2 size={16} /> Edit Profile
               </button>
@@ -103,7 +103,7 @@ const Profile = () => {
                   setIsEditing(false);
                   fetchProfile(); // Reset unsaved changes
                 }}
-                className="flex items-center gap-2 px-5 py-2.5 bg-red-100 text-red-600 rounded-xl hover:bg-red-200 transition font-semibold"
+                className="cursor-pointer flex items-center gap-2 px-5 py-2.5 bg-red-100 text-red-600 rounded-xl hover:bg-red-200 transition font-semibold"
               >
                 <X size={16} /> Cancel
               </button>
@@ -196,7 +196,7 @@ const Profile = () => {
                   <button 
                     type="submit" 
                     disabled={saving}
-                    className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition font-bold disabled:opacity-70"
+                    className="cursor-pointer flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition font-bold disabled:opacity-70"
                   >
                     {saving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
                     {saving ? "Saving..." : "Save Changes"}
@@ -213,3 +213,5 @@ const Profile = () => {
 };
 
 export default Profile;
+
+

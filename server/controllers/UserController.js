@@ -94,5 +94,60 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+    try{
+        const user = req.user;
+        if(!user){
+            // Fixed typo: 'seccess' to 'success'
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        
+        return res.status(200).json({ success: true, user });
+    }catch(error){
+        console.error("Get User Error:", error);
+        return res.status(500).json({success: false, message: "Server error while fetching user"});
+    }
+}
 
-export {addUser, getUsers, deleteUser};
+
+const updateUser = async (req, res) => {
+    try{
+        const { name, email, address, password } = req.body;
+        const userId = req.user._id; // Safely get ID from the authenticated token
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        // Update basic fields
+        if (name) user.name = name;
+        if (email) user.email = email;
+        if (address) user.address = address;
+
+        // If user typed a new password, hash it and update
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(password, salt);
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Profile updated successfully",
+            user: { 
+                id: user._id, 
+                name: user.name, 
+                email: user.email, 
+                address: user.address, 
+                role: user.role 
+            }
+        });
+    }catch(error){
+        console.error("Update User Error:", error);
+        return res.status(500).json({ success: false, message: "Server error while updating profile" });
+    }
+}
+
+export {addUser, getUsers, deleteUser, getUser, updateUser};
