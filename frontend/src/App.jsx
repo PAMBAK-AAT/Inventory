@@ -12,6 +12,7 @@ import Product from './components/Products.jsx'
 import Users from './components/Users.jsx';
 import CustomerProducts from './components/CustomerProducts.jsx';
 import Orders from './components/Orders.jsx';
+import Profile from './components/Profile.jsx';
 
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
           >
             <Route index element={<CustomerProducts />}></Route>
             <Route path="orders" element={<Orders />}></Route>
+            <Route path="profile" element={<Profile />}></Route>
 
           </Route>
           <Route path="/login" element={<Login />} />

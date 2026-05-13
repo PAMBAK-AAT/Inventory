@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { FiUserPlus, FiUser, FiLock, FiMail, FiArrowLeft } from 'react-icons/fi'; // Added FiMail and FiUserPlus
+import { useAuth } from '../context/AuthContext';
 
 const SignUp = () => {
     const [username, setUsername] = useState('');
@@ -12,6 +13,8 @@ const SignUp = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    const {login} = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,7 +31,8 @@ const SignUp = () => {
 
             if (res.data.success) {
                 // Success! Navigate to the login page for them to sign in.
-                navigate('/login');
+                login(res.data.user, res.data.token);
+                navigate('/');
             }
         } catch (err) {
             if (err.response && err.response.data) {

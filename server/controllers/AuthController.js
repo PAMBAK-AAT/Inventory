@@ -20,7 +20,7 @@ const login = async (req, res) => {
         }
         const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '50000h'});
 
-        return res.status(200).json({success: true, message: "login successfully", token, user: {id: user._id, name: user.name, email: user.email, role: user.role}});
+        return res.status(200).json({success: true, message: "login successfully", token, user: {id: user._id, name: user.username, email: user.email, role: user.role}});
     }catch(error){
         return res.status(500).json({success: false, message: "Internal server error"});
     }
@@ -30,10 +30,10 @@ const login = async (req, res) => {
 // --- REGISTER FUNCTION (New) ---
 const register = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { username, email, password } = req.body;
 
         // 1. Validate input
-        if (!name || !email || !password) {
+        if (!username || !email || !password) {
             return res.status(400).json({ success: false, message: "Please provide all fields" });
         }
 
@@ -50,19 +50,20 @@ const register = async (req, res) => {
         // 4. Create a new user
         // Assumes your User model has a 'username' field, as sent by your SignUp.jsx
         const newUser = new User({
-            name, // or 'name: username' if your model field is 'name'
+            name:username, // or 'name: username' if your model field is 'name'
             email,
             password: hashedPassword,
             // 'role' will default to 'customer' if you set it in your User model schema
         });
 
-        // 5. Save the user to the database
-        await newUser.save();
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '50000h' });
 
         // 6. Send success response
         return res.status(201).json({ 
             success: true, 
-            message: "User registered successfully. Please log in." 
+            message: "User registered successfully.",
+            token,
+            user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role } 
         });
 
     } catch (error) {
