@@ -40,8 +40,11 @@ const addOrder = async (req, res) => {
 const getOrders = async (req, res) => {
     try {
         const userId = req.user._id;
-        
-        const orders = await OrderModel.find({ customer: userId })
+        let query = {};
+        if(req.user.role === 'customer'){
+            query = {customer: userId};
+        }
+        const orders = await OrderModel.find(query)
             .populate({
                 path: 'product',
                 select: 'name price',
@@ -66,5 +69,8 @@ const getOrders = async (req, res) => {
         });
     }
 }
+
+
+
 
 export {addOrder, getOrders}

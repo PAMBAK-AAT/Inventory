@@ -13,6 +13,7 @@ import Users from './components/Users.jsx';
 import CustomerProducts from './components/CustomerProducts.jsx';
 import Orders from './components/Orders.jsx';
 import Profile from './components/Profile.jsx';
+import Summary from './components/Summary.jsx';
 
 
 function App() {
@@ -33,7 +34,7 @@ function App() {
           >
             <Route
               index
-              element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Summary of dashboard</h1>}
+              element={<Summary />}
             />
             <Route
               path="categories"
@@ -53,8 +54,10 @@ function App() {
             />
             <Route
               path="orders"
-              element={<h1 className='flex justify-center bg-amber-600 font-bold text-4xl'>Orders Page</h1>}
+              element={<Orders />}
             />
+            <Route path="profile" element={<Profile />}></Route>
+            
 
           </Route>
 
