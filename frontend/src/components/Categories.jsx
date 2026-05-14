@@ -1,4 +1,7 @@
 
+
+
+
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import {
@@ -13,7 +16,6 @@ import {
 } from 'react-icons/fa';
 
 const Categories = () => {
-    // --- All your logic from before (no changes) ---
     const [categoryName, setCategoryName] = useState('');
     const [categoryDescription, setCategoryDescription] = useState('');
     const [categories, setCategories] = useState([]);
@@ -142,25 +144,27 @@ const Categories = () => {
         }
     };
     
-    // --- STYLING & LAYOUT ---
+    // --- STYLING & LAYOUT UPDATED TO MATCH SUMMARY.JSX ---
     return (
-        // *** NOTE: I added ml-16 md:ml-64 back in. This is NEEDED to prevent your sidebar from covering your page. ***
-        <div className="p-4 sm:p-6 lg:p-8 min-h-screen animated-gradient">
-            <h1 className="text-3xl font-bold text-white mb-6 drop-shadow-md">
-                Category Management
-            </h1>
+        <div className="p-6 md:p-8 bg-gray-50 min-h-screen">
+            
+            {/* Page Header matching Summary.jsx */}
+            <div className="mb-8">
+                <h1 className="text-3xl font-extrabold text-gray-900">Category Management</h1>
+                <p className="text-gray-500 mt-1">Organize and manage your product categories.</p>
+            </div>
 
             {/* Notification component */}
             {notification.message && (
                 <div 
-                    className={`mb-6 p-4 rounded-xl shadow-lg ${
+                    className={`mb-6 p-4 rounded-xl shadow-sm border ${
                         notification.type === 'success' 
-                        ? 'bg-green-100 border border-green-300 text-green-800' 
-                        : 'bg-red-100 border border-red-300 text-red-800'
+                        ? 'bg-green-50 border-green-200 text-green-800' 
+                        : 'bg-red-50 border-red-200 text-red-800'
                     }`}
                 >
-                    <span className="flex items-center text-sm font-medium">
-                        {notification.type === 'success' ? <FaCheckCircle className="mr-3 text-lg" /> : <FaExclamationCircle className="mr-3 text-lg" />}
+                    <span className="flex items-center text-sm font-bold">
+                        {notification.type === 'success' ? <FaCheckCircle className="mr-3 text-lg text-green-600" /> : <FaExclamationCircle className="mr-3 text-lg text-red-600" />}
                         {notification.message}
                     </span>
                 </div>
@@ -171,15 +175,15 @@ const Categories = () => {
 
                 {/* --- Left Column: Add/Edit Category Form --- */}
                 <div className="lg:col-span-2">
-                    <div className="bg-white/70 backdrop-blur-lg p-6 rounded-2xl shadow-xl border border-white/30 transition-all duration-300 hover:shadow-2xl">
-                        <h2 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
-                            {isEditMode ? <FaEdit className="text-purple-600" /> : <FaPlus className="text-purple-600" />}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <h2 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                            {isEditMode ? <FaEdit className="text-blue-600" /> : <FaPlus className="text-blue-600" />}
                             {isEditMode ? 'Edit Category' : 'Add New Category'}
                         </h2>
                         
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div>
-                                <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700 mb-1">
+                                <label htmlFor="categoryName" className="block text-sm font-bold text-gray-700 mb-2">
                                     Category Name
                                 </label>
                                 <input
@@ -188,12 +192,12 @@ const Categories = () => {
                                     placeholder="e.g. Engine Oil"
                                     value={categoryName}
                                     onChange={(e) => setCategoryName(e.target.value)}
-                                    className="w-full px-4 py-3 text-gray-500 bg-white/80 border border-slate-300 rounded-lg focus:outline-none focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all duration-200"
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-gray-800"
                                     required
                                 />
                             </div>
                             <div>
-                                <label htmlFor="categoryDescription" className="block text-sm font-medium text-gray-700 mb-1">
+                                <label htmlFor="categoryDescription" className="block text-sm font-bold text-gray-700 mb-2">
                                     Description
                                 </label>
                                 <input
@@ -202,32 +206,30 @@ const Categories = () => {
                                     placeholder="e.g. All types of oil used in Trucks"
                                     value={categoryDescription}
                                     onChange={(e) => setCategoryDescription(e.target.value)}
-                                    className="w-full text-gray-500 px-4 py-3 bg-white/80 border border-slate-300 rounded-lg focus:outline-none focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all duration-200"
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-gray-800"
                                 />
                             </div>
                             
                             {/* Form Buttons */}
-                            <div className="space-y-3 pt-3">
+                            <div className="space-y-3 pt-4 border-t border-gray-100">
                                 <button
                                     type="submit"
                                     disabled={submitLoading}
-                                    className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-purple-500/40 cursor-pointer disabled:bg-gray-400 disabled:shadow-none disabled:scale-100"
+                                    className="w-full flex justify-center items-center gap-2 bg-blue-600 text-white py-3 px-4 rounded-xl font-bold shadow-md hover:bg-blue-700 transition-all duration-200 cursor-pointer disabled:bg-gray-400 disabled:shadow-none"
                                 >
                                     {submitLoading ? (
                                         <FaSpinner className="animate-spin" />
                                     ) : (
                                         isEditMode ? <FaSave /> : <FaPlus />
                                     )}
-                                    {/* --- 1. CHANGE HERE --- */}
                                     {submitLoading ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Add Category')}
                                 </button>
 
-                                {/* --- 2. CHANGE HERE --- */}
                                 {isEditMode && (
                                     <button
                                         type="button"
                                         onClick={handleFormClear}
-                                        className="w-full flex justify-center items-center gap-2 bg-slate-100 text-slate-700 py-3 px-4 rounded-lg font-semibold shadow-sm border border-slate-200 transition-all duration-300 transform hover:bg-slate-200 hover:border-slate-300 cursor-pointer"
+                                        className="w-full flex justify-center items-center gap-2 bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-bold hover:bg-gray-200 transition-all duration-200 cursor-pointer"
                                     >
                                         <FaTimes /> Cancel
                                     </button>
@@ -239,48 +241,52 @@ const Categories = () => {
 
                 {/* --- Right Column: Category List Table --- */}
                 <div className="lg:col-span-3">
-                    <div className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/30 overflow-hidden transition-all duration-300 hover:shadow-2xl">
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                         {tableLoading ? (
-                            <div className="flex justify-center items-center h-80">
-                                <FaSpinner className="animate-spin text-5xl text-purple-500" />
+                            <div className="flex flex-col justify-center items-center h-80">
+                                <FaSpinner className="animate-spin text-4xl text-blue-600 mb-4" />
+                                <p className="text-gray-500 font-medium">Loading categories...</p>
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
-                                <table className="w-full text-left">
-                                    <thead className="bg-white/50 border-b border-white/30">
+                                <table className="w-full text-left border-collapse">
+                                    <thead className="bg-gray-50 border-b border-gray-100">
                                         <tr>
-                                            <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">S.No</th>
-                                            <th className="px-6 py-4 text-sm font-semibold text-gray-60t00 uppercase tracking-wider">Category Name</th>
-                                            <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider text-center">Action</th>
+                                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">S.No</th>
+                                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Category Name</th>
+                                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-gray-200/50">
+                                    <tbody className="divide-y divide-gray-100">
                                         {categories.length === 0 ? (
                                             <tr>
-                                                <td colSpan="3" className="text-center text-gray-700 py-16">
-                                                    No categories found.
+                                                <td colSpan="3" className="text-center text-gray-500 py-16 font-medium">
+                                                    No categories found. Add one to get started.
                                                 </td>
                                             </tr>
                                         ) : (
                                             categories.map((category, index) => (
-                                                <tr key={category._id} className="hover:bg-purple-100/50 transition-colors duration-150">
+                                                <tr key={category._id} className="hover:bg-gray-50 transition-colors duration-150">
                                                     <td className="px-6 py-5 whitespace-nowrap">
-                                                        <span className="font-normal text-gray-600">{index + 1}</span>
+                                                        <span className="font-semibold text-gray-500">{index + 1}</span>
                                                     </td>
                                                     <td className="px-6 py-5 whitespace-nowrap">
-                                                        <span className="font-medium text-gray-900">{category.categoryName}</span>
+                                                        <span className="font-bold text-gray-800">{category.categoryName}</span>
+                                                        {category.categoryDescription && (
+                                                            <p className="text-sm text-gray-500 mt-1">{category.categoryDescription}</p>
+                                                        )}
                                                     </td>
                                                     <td className="px-6 py-5 whitespace-nowrap text-center">
                                                         <div className="flex items-center justify-center space-x-3">
                                                             <button 
                                                                 onClick={() => handleEditClick(category)}
-                                                                className="flex items-center justify-center gap-1.5 py-1.5 px-4 text-xs font-semibold text-purple-700 bg-purple-100 rounded-full hover:bg-purple-200 transition-all duration-300 cursor-pointer"
+                                                                className="flex items-center justify-center gap-1.5 py-2 px-4 text-xs font-bold text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-all duration-200 cursor-pointer"
                                                             >
                                                                 <FaEdit /> Edit
                                                             </button>
                                                             <button 
                                                                 onClick={() => handleDeleteClick(category._id)}
-                                                                className="flex items-center justify-center gap-1.5 py-1.5 px-4 text-xs font-semibold text-red-700 bg-red-100 rounded-full hover:bg-red-200 transition-all duration-300 cursor-pointer"
+                                                                className="flex items-center justify-center gap-1.5 py-2 px-4 text-xs font-bold text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-all duration-200 cursor-pointer"
                                                             >
                                                                 <FaTrash /> Delete
                                                             </button>
@@ -302,5 +308,4 @@ const Categories = () => {
 }
 
 export default Categories;
-
 
