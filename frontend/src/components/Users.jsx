@@ -40,8 +40,8 @@ const Users = () => {
       const config = { headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` } };
       
       const [usersRes, ordersRes] = await Promise.all([
-        axios.get("http://localhost:3000/api/users", config),
-        axios.get("http://localhost:3000/api/order", config) 
+        axios.get(`${import.meta.env.VITE_API_URL}/api/users`, config),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/order`, config) 
       ]);
 
       if (usersRes.data.success) {
@@ -76,7 +76,7 @@ const Users = () => {
 
     try {
       const config = { headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` } };
-      const response = await axios.delete(`http://localhost:3000/api/users/delete/${userId}`, config);
+      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/users/delete/${userId}`, config);
 
       if (response.data.success) {
         setNotification({ message: "User deleted successfully!", type: "success" });

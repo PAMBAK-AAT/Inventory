@@ -24,7 +24,7 @@ const Profile = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` } };
       // Note: Make sure you have this route in your backend!
-      const res = await axios.get("http://localhost:3000/api/users/profile", config);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/profile`, config);
       
       if (res.data.success) {
         const { name, email, address } = res.data.user;

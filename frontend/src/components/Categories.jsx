@@ -28,7 +28,7 @@ const Categories = () => {
     const fetchCategories = useCallback(async () => {
         setTableLoading(true);
         try {
-            const response = await axios.get("http://localhost:3000/api/category", {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/category`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` }
             });
             if (response.data.success) {
@@ -80,7 +80,7 @@ const Categories = () => {
         
         try {
             const response = await axios.delete(
-                `http://localhost:3000/api/category/delete/${categoryId}`,
+                `${import.meta.env.VITE_API_URL}/api/category/delete/${categoryId}`,
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` }
                 }
@@ -109,7 +109,7 @@ const Categories = () => {
             let response;
             if (isEditMode) {
                 response = await axios.put(
-                    `http://localhost:3000/api/category/update/${editingCategoryId}`,
+                    `${import.meta.env.VITE_API_URL}/api/category/update/${editingCategoryId}`,
                     categoryData,
                     {
                         headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` }
@@ -117,7 +117,7 @@ const Categories = () => {
                 );
             } else {
                 response = await axios.post(
-                    "http://localhost:3000/api/category/add",
+                    `${import.meta.env.VITE_API_URL}/api/category/add`,
                     categoryData,
                     {
                         headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` }

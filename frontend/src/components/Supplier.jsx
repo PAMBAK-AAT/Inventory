@@ -34,7 +34,7 @@ const Supplier = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/supplier",
+        `${import.meta.env.VITE_API_URL}/api/supplier`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
@@ -85,7 +85,7 @@ const Supplier = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this supplier?")) {
       try {
-        await axios.delete(`http://localhost:3000/api/supplier/delete/${id}`, {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/supplier/delete/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
           },
@@ -102,8 +102,8 @@ const Supplier = () => {
     e.preventDefault();
     try {
       const url = isEdit 
-        ? `http://localhost:3000/api/supplier/edit/${selectedId}` 
-        : "http://localhost:3000/api/supplier/add";
+        ? `${import.meta.env.VITE_API_URL}/api/supplier/edit/${selectedId}` 
+        : "${import.meta.env.VITE_API_URL}/api/supplier/add";
       
       const method = isEdit ? 'put' : 'post';
 

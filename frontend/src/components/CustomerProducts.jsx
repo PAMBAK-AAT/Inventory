@@ -27,7 +27,7 @@ const CustomerProducts = () => {
     setLoading(true);
     try {
       const config = { headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` } };
-      const res = await axios.get("http://localhost:3000/api/product", config);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/product`, config);
       setProducts(res.data.products || []);
     } catch (error) {
       console.error("Fetch error", error);
@@ -58,7 +58,7 @@ const CustomerProducts = () => {
       };
 
       try{
-        const response = await axios.post("http://localhost:3000/api/order/add", payload, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/order/add`, payload, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
           },

@@ -28,9 +28,9 @@ const Product = () => {
     
     // Fetching all data
     const [prodRes, catRes, suppRes] = await Promise.all([
-      axios.get("http://localhost:3000/api/product", config),
-      axios.get("http://localhost:3000/api/category", config),
-      axios.get("http://localhost:3000/api/supplier", config)
+      axios.get(`${import.meta.env.VITE_API_URL}/api/product`, config),
+      axios.get(`${import.meta.env.VITE_API_URL}/api/category`, config),
+      axios.get(`${import.meta.env.VITE_API_URL}/api/supplier`, config)
     ]);
 
     // Added console logs to help you debug what the server is actually sending
@@ -62,8 +62,8 @@ const Product = () => {
     try {
       const method = isEdit ? 'put' : 'post';
       const url = isEdit 
-        ? `http://localhost:3000/api/product/edit/${selectedId}` 
-        : "http://localhost:3000/api/product/add";
+        ? `${import.meta.env.VITE_API_URL}/api/product/edit/${selectedId}` 
+        : `${import.meta.env.VITE_API_URL}/api/product/add`;
       
       await axios[method](url, formData, config);
       setModalOpen(false);
@@ -153,7 +153,7 @@ const Product = () => {
                     <button 
                       onClick={async () => {
                         if (window.confirm("Delete product?")) {
-                            await axios.delete(`http://localhost:3000/api/product/delete/${p._id}`, {
+                            await axios.delete(`${import.meta.env.VITE_API_URL}/api/product/delete/${p._id}`, {
                                 headers: { Authorization: `Bearer ${localStorage.getItem("pos-token")}` }
                             });
                             fetchInitialData();
