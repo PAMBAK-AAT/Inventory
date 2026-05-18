@@ -12,7 +12,10 @@ import orderRouter from './routes/order.js'
 
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: '*', // Allows all domains for now
+    credentials: true
+}));
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/category', categoryRoutes);
@@ -22,7 +25,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/order', orderRouter);
 
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
     connectDB();
     console.log("Server is running on 3000 port.");
 } )
