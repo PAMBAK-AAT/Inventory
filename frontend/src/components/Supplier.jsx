@@ -103,7 +103,7 @@ const Supplier = () => {
     try {
       const url = isEdit 
         ? `${import.meta.env.VITE_API_URL}/api/supplier/edit/${selectedId}` 
-        : "${import.meta.env.VITE_API_URL}/api/supplier/add";
+        : `${import.meta.env.VITE_API_URL}/api/supplier/add`;
       
       const method = isEdit ? 'put' : 'post';
 
