@@ -110,7 +110,7 @@ const SignUp = () => {
                         className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-purple-500/40 cursor-pointer disabled:bg-gray-400 disabled:shadow-none disabled:scale-100 flex items-center justify-center"
                     >
                         {loading ? (
-                            <FiSpinner className="animate-spin mr-2" /> // Using FiSpinner
+                            <FiUserPlus className="animate-spin mr-2" /> // Using FiSpinner
                         ) : (
                             <FiUserPlus className="mr-2" />
                         )}
